@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+
+import "./App.css"
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [politicians, setPoliticians] = useState([])
+
+  useEffect(() => {
+    fetch("http://localhost:3333/politicians")
+      .then(response => response.json())
+      .then(data => setPoliticians(data))
+      .catch(error => console.error(error))
+
+  }, []);
+
+  console.log(politicians)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>Lista Politici</h1>
+      <div className="politicians-list">
+        {politicians.map((politician) => <div className="card" key={politician.id}>
+          <img src={politician.image} alt={politician.name} />
+          <h2>{politician.name}</h2>
+          <p>{politician.position}</p>
+          <p>{politician.biography}</p>
+        </div>)}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
+
 }
 
 export default App
